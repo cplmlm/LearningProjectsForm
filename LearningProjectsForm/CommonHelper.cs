@@ -13,30 +13,20 @@ namespace LearningProjectsForm
         /// 调用WebService接口
         /// </summary>
         /// <param name="url">请求接口地址</param>
-        /// <param name="strInput"></param>
+        /// <param name="param">请求参数</param>
         /// <returns></returns>
-        public static string HttpPostWebService(string url, string strInput)
+        public static string HttpPostWebService(string url, string param)
         {
             string result = string.Empty;//返回值
-            //string param = string.Empty;//请求参数
             byte[] bytes = null;
             HttpWebRequest request = null;
             Stream writer = null;
             string responseString = string.Empty;//返回内容
-            // SOAP格式内容，参数为：xml
-            StringBuilder param = new StringBuilder();
-            param.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://service.ws.domain.jkjczx.ohms.zjcdjk.cn/\">\r\n");
-            param.Append("<soapenv:Header/>\r\n");
-            param.Append("<soapenv:Body>\r\n");
-            param.Append("<ser:SynApplyInfo>\r\n");
-            param.Append("<arg0><![CDATA[");
-            param.Append(strInput);
-            param.Append("]]></arg0>\r\n");
-            param.Append("</ser:SynApplyInfo>\r\n</soapenv:Body>\r\n</soapenv:Envelope>");
             try
             {
-                //param = $"strInput={strInput}";//接收参数名称
-                bytes = Encoding.UTF8.GetBytes(param.ToString());
+                bytes = Encoding.UTF8.GetBytes(param);
+                //解决Framwork4.0调用Web接口报错：基础连接已经关闭：发送时发生错误
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)3072 | (SecurityProtocolType)768 | SecurityProtocolType.Tls;
                 request = (HttpWebRequest)WebRequest.Create(url);
                 request.Method = "POST";
                 request.ContentType = "text/xml;charset=UTF-8";
