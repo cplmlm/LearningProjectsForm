@@ -1,0 +1,1 @@
+1、C#通过HttpWebResult请求WebService接口，参数是xml
